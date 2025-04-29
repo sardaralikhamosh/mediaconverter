@@ -1,62 +1,28 @@
 <?php
-session_start();
+// Path to the upload folder
+$uploadDir = 'upload/';
+$uploadedFile = $uploadDir . basename($_FILES['docFile']['name']);
 
-// Configuration
-$uploadDir = __DIR__ . '/uploads/';
-$convertedDir = __DIR__ . '/converted/';
-$allowedMimeTypes = [
-    'application/pdf', 
-    'text/plain',
-    'text/csv',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-];
-
-// Create directories if they don't exist
-if (!file_exists($uploadDir)) mkdir($uploadDir, 0755, true);
-if (!file_exists($convertedDir)) mkdir($convertedDir, 0755, true);
-
-// Process file upload
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['docFile'])) {
-    $file = $_FILES['docFile'];
-    $targetFormat = $_POST['target_format'] ?? 'pdf';
+// Move the uploaded file to the upload folder
+if (move_uploaded_file($_FILES['docFile']['tmp_name'], $uploadedFile)) {
+    // Conversion code goes here
     
-    try {
-        // Validate input
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            throw new Exception('File upload error: ' . $file['error']);
-        }
+    // Assume that $convertedFile contains the path to the converted file
 
-        // Verify file type
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->file($file['tmp_name']);
-        
-        if (!in_array($mimeType, $allowedMimeTypes)) {
-            throw new Exception('Invalid file type. Supported formats: PDF, DOC, DOCX, TXT, CSV');
-        }
+    // Set headers to prompt download
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename="' . basename($convertedFile) . '"');
+    header('Content-Length: ' . filesize($convertedFile));
 
-        // Generate safe filename
-        $originalName = pathinfo($file['name'], PATHINFO_FILENAME);
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $safeFilename = preg_replace('/[^a-zA-Z0-9\-_]/', '', $originalName);
-        $newFilename = uniqid() . '_' . $safeFilename . '.' . $extension;
-        $uploadPath = $uploadDir . $newFilename;
+    // Read and output the converted file
+    readfile($convertedFile);
 
-        // Move uploaded file
-        if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            throw new Exception('Failed to move uploaded file');
-        }
-
-        // Redirect to conversion script
-        header("Location: convert_documents.php?" . http_build_query([
-            'file' => $newFilename,
-            'target' => $targetFormat
-        ]));
-        exit;
-
-    } catch (Exception $e) {
-        $uploadError = $e->getMessage();
-    }
+    // Delete the uploaded and converted files after download
+    unlink($uploadedFile);  // Delete original uploaded file
+    unlink($convertedFile);  // Delete the converted file
+    exit;
+} else {
+    echo "File upload failed.";
 }
 ?>
 
@@ -65,118 +31,103 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['docFile'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Converter</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
-    <style>
-        .converter-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    <title>Image and Document Converter</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    
+    <!-- Optional Bootstrap Theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="custom.css">
+    
+        <style>
+            /*custom css for new idex file by sardaralikhamosh@gmail.com*/
+        .bgcolumn{
+            background: lightgray;
         }
-        .file-preview {
-            border: 2px dashed #007bff;
-            padding: 2rem;
-            text-align: center;
-            margin: 1rem 0;
-            border-radius: 8px;
-            background: #f8f9fa;
+        /*custom for new index is closed*/
+        
+        /*for mobile only start*/
+        @media screen and (max-width: 624px){
+            .row.mg-5.justify-content-between {
+                display: contents;
+            }
+            .marginpagecustom{
+                margin: 150px 0 50px 0;
+            }
+            .margincolumnscustom{
+                margin-top:10px;
+            }
+            .custom-margin-t-b{
+                margin: 20px 0;
+            }
         }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .alert {
-            margin-top: 1.5rem;
-        }
-        .btn-convert {
-            background: #007bff;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-        .btn-convert:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-        }
-    </style>
+        /*for mobile ends*/
+        /*        for laptop starts*/
+            @media screen and (min-width: 624px){
+                .marginpagecustom{
+                margin: 150px 0 50px 0;
+            }
+            .custom-margin-t-b{
+                margin: 20px 0;
+            }
+            }
+        </style>
+        
 </head>
 <body>
+
+    <!-- Include Header -->
     <?php include 'header.php'; ?>
 
-    <div class="container">
-        <div class="converter-container">
-            <h2 class="text-center mb-4">Document Converter</h2>
-            <p class="text-center text-muted mb-4">
-                Convert between PDF, DOCX, TXT, and CSV formats
-            </p>
+        <!-- document section starts -->
+        <section class="custom-margin-t-b .text-center justify-content-center d-flex" style="min-height:100vh; margin-top:20px">
+            <div class="container justify-content-center ">
+            <!-- Document Upload and Conversion Form -->
+            <h2 class="text-center mt-5">Convert Document Files</h2>
+            <p class="text-center">Convert PDF, DOC, HTML, CSV, TXT, or RTF files to different formats.</p>
+            <form class="file-upload-form" method="post" enctype="multipart/form-data" action="convert_documents.php">
+                <div class="file-upload-design">
+                    <div class="form-group">
+                        <input type="file" name="docFile" class="form-control" required />
+                    </div>
 
-            <form class="file-upload-form" method="post" enctype="multipart/form-data" action="document.php">
-                <div class="file-preview" id="filePreview">
-                    <span class="text-muted">No file selected</span>
+                    <div class="form-group">
+                        <select name="source_format" class="form-control" required>
+                            <option value="" disabled selected>Select source format</option>
+                            <option value="txt">TXT</option>
+                            <option value="pdf">PDF</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select name="target_format" class="form-control" required>
+                            <option value="" disabled selected>Select target format</option>
+                            <option value="txt">TXT</option>
+                            <option value="pdf">PDF</option>
+                            <option value="doc">DOCX</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Convert Document</button>
                 </div>
-
-                <div class="form-group">
-                    <input type="file" name="docFile" class="form-control-file" 
-                           id="fileInput" required accept=".pdf,.doc,.docx,.txt,.csv">
-                </div>
-
-                <div class="form-group">
-                    <select name="target_format" class="form-control" id="targetFormat" required>
-                        <option value="">Convert to...</option>
-                        <option value="pdf">PDF Document</option>
-                        <option value="docx">Word Document (DOCX)</option>
-                        <option value="txt">Plain Text (TXT)</option>
-                        <option value="csv">CSV File</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-convert btn-block">
-                    Convert Now
-                </button>
             </form>
 
-            <?php if (!empty($uploadError)): ?>
-                <div class="alert alert-danger mt-4">
-                    <?= htmlspecialchars($uploadError) ?>
-                </div>
-            <?php endif; ?>
+            <div class="result" id="result"></div>
         </div>
-    </div>
-
+        </section>
+<!-- document section ends here -->
+    <!-- Include Footer -->
     <?php include 'footer.php'; ?>
 
-    <script>
-        // File input preview handler
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('filePreview');
-            
-            if (file) {
-                preview.innerHTML = `
-                    <strong>${file.name}</strong><br>
-                    <small class="text-muted">
-                        ${(file.size/1024).toFixed(2)} KB • 
-                        ${file.type.replace('application/', '').toUpperCase()}
-                    </small>
-                `;
-            } else {
-                preview.innerHTML = '<span class="text-muted">No file selected</span>';
-            }
-        });
+    <!-- jQuery and Bootstrap JS for collapsible behavior -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfO8fw5SYs5xY5d6p39H9AaKq10M0ZT+pl5g1K+fo" crossorigin="anonymous"></script>
 
-        // Form validation
-        document.getElementById('conversionForm').addEventListener('submit', function(e) {
-            const fileInput = document.getElementById('fileInput');
-            const formatSelect = document.getElementById('targetFormat');
-            
-            if (!fileInput.files.length || !formatSelect.value) {
-                e.preventDefault();
-                alert('Please select a file and conversion format');
-            }
-        });
-    </script>
 </body>
 </html>

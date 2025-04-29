@@ -1,0 +1,144 @@
+/* Global custom styles */
+body {
+    background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+    font-family: 'Poppins', sans-serif;
+    padding-top: 10px; /* To avoid content going under the sticky header */
+}
+
+.footer {
+    background-color: #f8f8f8;
+    padding: 20px 0;
+    border-top: 1px solid #e7e7e7;
+    margin: 20px 0 0 0;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.navbar-fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+/* Custom styles for centered navbar */
+.navbar-center {
+    float: none;
+    display: inline-block;
+}
+
+.navbar-default .navbar-nav > li {
+    display: inline-block;
+    float: none;
+}
+
+.navbar-default .navbar-nav {
+    text-align: center;
+    width: 100%;
+}
+
+
+/*here is the end of default css from the chat GPT*/
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+        
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 30px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            padding: 30px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            border-radius: 10px;
+        }
+
+        .file-upload-form {
+            width: fit-content;
+            height: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        /*.file-upload-label input {
+            display: none;
+        }
+*/
+        .file-upload-label {
+            cursor: pointer;
+            padding: 20px 40px;
+            border-radius: 10px;
+            border: 2px dashed rgb(243, 139, 139);
+            margin-top: 15px;
+        }
+
+        .file-upload-design {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .browse-button, button {
+            background-color: #fa4d56;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .browse-button:hover, button:hover {
+            background-color: #de151f;
+        }
+
+        .result {
+            margin-top: 15px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .result > img {
+            width: 400px;
+            margin-bottom: 15px;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+        }
+/*only for laptop css start*/
+@media screen and (min-width: 624px) {
+    .row.fullwidthcontainer {
+        width: 100%;
+    }
+}
