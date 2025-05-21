@@ -53,7 +53,8 @@
 <body>
 
     <!-- Include Header -->
-    <?php include 'header.php'; ?>
+    <?php include 'header.php'; ?> 
+    <!-- here is the header.php which is an external php file having header content -->
     <section class="marginpagecustom">
          <div class="container" id="image">
             <!-- Image Upload and Conversion Form -->
