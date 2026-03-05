@@ -34,17 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 $imagick->clear();
 
-                // Create directories if they don't exist
-                $uploadDir = 'heic_uploads/';
-                $convertedDir = 'converted_pdfs/';
+                // Set directory paths using absolute paths
+                $baseDir = __DIR__; // Points to /public_html/HEIC/
+                $uploadDir = $baseDir . '/heic_uploads/';
+                $convertedDir = $baseDir . '/converted_pdfs/';
                 
+                // Create directories if they don't exist
                 if (!file_exists($uploadDir)) mkdir($uploadDir, 0755, true);
                 if (!file_exists($convertedDir)) mkdir($convertedDir, 0755, true);
 
                 // Generate unique filenames
                 $filename = uniqid() . '.heic';
                 $heicPath = $uploadDir . $filename;
-                $pdfPath = $convertedDir . pathinfo($filename, PATHINFO_FILENAME) . '.pdf';
+                $pdfFilename = pathinfo($filename, PATHINFO_FILENAME) . '.pdf';
+                $pdfPath = $convertedDir . $pdfFilename;
 
                 // Move uploaded file
                 if (move_uploaded_file($file['tmp_name'], $heicPath)) {
@@ -60,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         unlink($heicPath);
                     }
 
-                    $downloadLink = $pdfPath;
+                    // Set web-accessible download path
+                    $downloadLink = '/HEIC/converted_pdfs/' . $pdfFilename;
                 } else {
                     $uploadError = 'Error uploading file.';
                 }
@@ -102,10 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-top: 30px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .mt-20 { margin-top: 20px; }
+        .mt-10 { margin-top: 10px; }
     </style>
 </head>
 <body>
-    <?php include 'header.php'; ?>
+    <?php include '../header.php'; // Updated path for header ?>
 
     <div class="container">
         <div class="container-wrapper">
@@ -154,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
-    <?php include 'footer.php'; ?>
+    <?php include '../footer.php'; // Updated path for footer ?>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>

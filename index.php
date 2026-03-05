@@ -53,8 +53,10 @@
 <body>
 
     <!-- Include Header -->
-    <?php include 'header.php'; ?> 
-    <!-- here is the header.php which is an external php file having header content -->
+    <?php include 'header.php'; ?>
+    
+    <!--section top-->
+    
     <section class="marginpagecustom">
          <div class="container" id="image">
             <!-- Image Upload and Conversion Form -->
@@ -99,10 +101,19 @@
                     <button type="submit" class="btn btn-primary btn-block">Convert Image</button>
                 </div>
             </form>
+
+           
         </div>
     </section>
+
     <!-- top section closed here -->
         <div class="container px-4 gap-3 ">
+                <br>
+    <br>
+    <br>
+        <br>
+    <br>
+    <br>
             <!-- row -1 starts here -->
                  <div class="row mg-5 justify-content-between ">
                 <div class="col-md-3 col-lg-3 col-sm-12 col bg-light margincolumnscustom">

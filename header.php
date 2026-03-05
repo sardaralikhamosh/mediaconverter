@@ -50,7 +50,7 @@
                 <div class="col-lg-4 col-md-12 col-sm-12">
                     <div class="navbar-header">
                         <!-- Brand Logo -->
-                        <a class="navbar-brand" href="/index.php">CONVERTER</a>
+                        <a class="navbar-brand" href="https://mediaconverter.dezinegenius.com/index.php">CONVERTER</a>
                         
                         <!-- Hamburger button for mobile -->
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
@@ -66,9 +66,9 @@
                 <div class="col-sm-8 col-lg-8 col-md-8 col-xs-8">
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li><a href="index.php">Home</a></li>
-                            <li><a href="./index.php/#image">Image</a></li>
-                            <li><a href="/document.php">Document</a></li>
+                            <li><a href="https://mediaconverter.dezinegenius.com/index.php">Home</a></li>
+                            <li><a href="https://mediaconverter.dezinegenius.com/index.php/#image">Image</a></li>
+                            <li><a href="https://mediaconverter.dezinegenius.com/document.php">Document</a></li>
                         </ul>
                     </div>
                 </div>
